@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import {
   VerticalTimeline,
@@ -8,7 +8,8 @@ import {
 } from "react-vertical-timeline-component";
 import "react-vertical-timeline-component/style.min.css";
 
-export default function TimelinePage() {
+// Create a separate component for the timeline content
+function TimelineContent() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -185,5 +186,20 @@ export default function TimelinePage() {
         )}
       </div>
     </div>
+  );
+}
+
+// Main page component with Suspense
+export default function TimelinePage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[#f5f5dc] flex items-center justify-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#8B4513]"></div>
+        </div>
+      }
+    >
+      <TimelineContent />
+    </Suspense>
   );
 }
